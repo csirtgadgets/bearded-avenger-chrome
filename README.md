@@ -1,5 +1,10 @@
 # Chrome Client for Bearded Avenger (CIFv3)
 
+# Getting Started
+
+* Disable any existing "CIF" clients
+* Load src/ as an "Unpacked Extension"
+
 # License and Copyright
 Copyright (C) 2017 the CSIRT Gadgets Foundation
 
