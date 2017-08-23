@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" style="min-width:600px;">
+<head>
+    <title>Search</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="ext/jquery-2.1.3.min.js"></script>
+    <script src="ext/bootstrap-3.3.2.min.js"></script>
+    <script src="ext/cif.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap-3.3.2.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme-3.2.2.min.css">
+
+    <script src="browserDependent_functions.js"></script>
+    <script src="common.js"></script>
+    <script src="popup.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/content/search.html" target="_blank">CIF</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="submit.html">Submit</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <form class="navbar-form" action="search.html" method="GET" id="searchForm">
+            <div class="form-group">
+                <input type="text" placeholder="evilbit.com" class="form-control" name="q" id="q">
+            </div>
+            <button class="btn btn-default" id="btnSearch">Search</button>
+        </form>
+    </div>
+</body>
+</html>
