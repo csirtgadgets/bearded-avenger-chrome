@@ -107,7 +107,7 @@ search = function(q, data, nolog) {
         $("#results").html(html).show().delay(delay).fadeOut('slow');
     }
 
-    cif_connector.search({
+    CIFSDK.search({
         remote: remote,
         token: token,
         query: q.toLowerCase(),

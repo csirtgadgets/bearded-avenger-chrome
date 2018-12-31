@@ -25,6 +25,7 @@ var CIFSDK = {
             url: args.remote,
             type: 'POST',
             dataType: 'json',
+            contentType: 'application/json',
             success: args.success,
             error: args.error,
             beforeSend: setHeaders,
