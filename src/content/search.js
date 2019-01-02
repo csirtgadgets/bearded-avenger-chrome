@@ -31,9 +31,19 @@ search = function(q, data, nolog) {
     function success(data, textStatus, xhr) {
         //$("#results").html("<div class='alert alert-success'>Test Connection Successful.</div>").show().delay(2000).fadeOut('slow');
         //$('#results').html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+        console.log(xhr.responseJSON['data']);
+        var result = [];
+        try{
+          var rresult = JSON.parse(xhr.responseJSON['data'])['hits']['hits'];
+          for (var i in rresult) {
+            result.push(rresult[i]['_source'])
+          }
+        } catch {
+            result = xhr.responseJSON['data'];
+        }
         t.fnClearTable();
-        for (var i in xhr.responseJSON){
-            var protocol = xhr.responseJSON[i].protocol;
+        for (var i in result){
+            var protocol = result[i].protocol;
             switch(protocol) {
                 case 0:
                     protocol = 'icmp';
@@ -48,7 +58,7 @@ search = function(q, data, nolog) {
                     protocol = '';
             }
 
-            var tlp = xhr.responseJSON[i].tlp
+            var tlp = result[i].tlp
             switch(tlp){
                 case 'red':
                     tlp = '<div style="color:red">RED</div>';
@@ -65,23 +75,23 @@ search = function(q, data, nolog) {
                     tlp = '<div style="color:black">' + tlp + '</div>';
             }
 
-            var observable = xhr.responseJSON[i].observable;
+            var indicator = result[i].indicator;
 
-            if (xhr.responseJSON[i].altid) {
-                observable = '<a href="' + xhr.responseJSON[i].altid + '">' + observable + '</a>'
+            if (result[i].altid) {
+                indicator = '<a href="' + result[i].altid + '">' + indicator + '</a>'
             }
 
 
             t.fnAddData([
-                xhr.responseJSON[i].reporttime,
-                xhr.responseJSON[i].group.join(),
+                result[i].reporttime,
+                result[i].group,
                 tlp,
-                observable,
-                xhr.responseJSON[i].provider || '',
-                xhr.responseJSON[i].tags.join(),
-                xhr.responseJSON[i].confidence,
+                indicator,
+                result[i].provider || '',
+                result[i].tags,
+                result[i].confidence,
                 protocol || '',
-                xhr.responseJSON[i].portlist || '',
+                result[i].portlist || '',
 
             ]);
         }
@@ -112,7 +122,6 @@ search = function(q, data, nolog) {
         token: token,
         query: q.toLowerCase(),
         success: success,
-        data, data,
         fail: fail,
         filters: {
             limit: limit,
