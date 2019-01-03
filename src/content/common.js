@@ -44,6 +44,12 @@ CIF_CLIENT.populateRestrictions=function(){
 		$("#altidrestriction").append('<option value="'+restrictions[i]+'"'+selected+'>'+restrictions[i]+'</option>');
 	}
 }
+CIF_CLIENT.getServerLogSetting=function(server){
+	servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
+  if (servers) {
+	   return servers[server]['logQueries'];
+  }
+}
 CIF_CLIENT.getServerName=function(server){
   servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
   if (servers) {
