@@ -12,7 +12,7 @@ function getUrlParameter(sParam)
     }
 }
 
-search = function(q, data, nolog) {
+search = function(data, nolog) {
     var server = CIF_CLIENT.getDefaultServer();
     var token = CIF_CLIENT.getServerKey(server);
     var remote = CIF_CLIENT.getServerUrl(server);
@@ -27,73 +27,79 @@ search = function(q, data, nolog) {
     //var limit = CIF_CLIENT.getServerLimit(server) || 100;
     var limit = 100;
     data["limit"] = limit;
+    data["nolog"] = nolog;
+    if (data['q']) {
+      data['q'] = data['q'].toLowerCase();
+    }
 
     function success(data, textStatus, xhr) {
         //$("#results").html("<div class='alert alert-success'>Test Connection Successful.</div>").show().delay(2000).fadeOut('slow');
         //$('#results').html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
         console.log(xhr.responseJSON['data']);
-        var result = [];
-        try{
-          var rresult = JSON.parse(xhr.responseJSON['data'])['hits']['hits'];
-          for (var i in rresult) {
-            result.push(rresult[i]['_source'])
-          }
-        } catch {
-            result = xhr.responseJSON['data'];
-        }
-        t.fnClearTable();
-        for (var i in result){
-            var protocol = result[i].protocol;
-            switch(protocol) {
-                case 0:
-                    protocol = 'icmp';
-                    break;
-                case 6:
-                    protocol = 'tcp';
-                    break;
-                case 17:
-                    protocl = 'udp';
-                    break;
-                default:
-                    protocol = '';
+        if (xhr.responseJSON['data'] != '{}') {
+            var result = [];
+            try{
+              var rresult = JSON.parse(xhr.responseJSON['data'])['hits']['hits'];
+              for (var i in rresult) {
+                result.push(rresult[i]['_source'])
+              }
+            } catch {
+                result = xhr.responseJSON['data'];
             }
+            t.fnClearTable();
+            for (var i in result){
+                var protocol = result[i].protocol;
+                switch(protocol) {
+                    case 0:
+                        protocol = 'icmp';
+                        break;
+                    case 6:
+                        protocol = 'tcp';
+                        break;
+                    case 17:
+                        protocl = 'udp';
+                        break;
+                    default:
+                        protocol = '';
+                }
 
-            var tlp = result[i].tlp
-            switch(tlp){
-                case 'red':
-                    tlp = '<div style="color:red">RED</div>';
-                    break;
-                case 'white':
-                    tlp = '<div style="color:black">WHITE</div>';
-                    break;
-                case 'green':
-                    tlp = '<div style="color:green">GREEN</div>';
-                    break;
-                case 'amber':
-                    tlp = '<div style="color:orange">AMBER</div>';
-                default:
-                    tlp = '<div style="color:black">' + tlp + '</div>';
+                var tlp = result[i].tlp
+                switch(tlp){
+                    case 'red':
+                        tlp = '<div style="color:red">RED</div>';
+                        break;
+                    case 'white':
+                        tlp = '<div style="color:black">WHITE</div>';
+                        break;
+                    case 'green':
+                        tlp = '<div style="color:green">GREEN</div>';
+                        break;
+                    case 'amber':
+                        tlp = '<div style="color:orange">AMBER</div>';
+                    default:
+                        tlp = '<div style="color:black">' + tlp + '</div>';
+                }
+
+                var indicator = result[i].indicator;
+
+                if (result[i].altid) {
+                    indicator = '<a href="' + result[i].altid + '">' + indicator + '</a>'
+                }
+
+
+                t.fnAddData([
+                    result[i].reporttime,
+                    result[i].group,
+                    tlp,
+                    indicator,
+                    result[i].provider || '',
+                    result[i].tags,
+                    result[i].confidence,
+                    protocol || '',
+                    result[i].portlist || '',
+
+                ]);
             }
-
-            var indicator = result[i].indicator;
-
-            if (result[i].altid) {
-                indicator = '<a href="' + result[i].altid + '">' + indicator + '</a>'
-            }
-
-
-            t.fnAddData([
-                result[i].reporttime,
-                result[i].group,
-                tlp,
-                indicator,
-                result[i].provider || '',
-                result[i].tags,
-                result[i].confidence,
-                protocol || '',
-                result[i].portlist || '',
-
-            ]);
         }
     }
 
@@ -120,13 +126,9 @@ search = function(q, data, nolog) {
     CIFSDK.search({
         remote: remote,
         token: token,
-        query: q.toLowerCase(),
         success: success,
         fail: fail,
-        filters: {
-            limit: limit,
-            nolog: nolog
-        }
+        data, data,
     });
 }
 // http://behstant.com/blog/?p=662
@@ -169,7 +171,10 @@ $(document).ready(function() {
     console.log(q);
 
     if(q){
-        search(q, nolog);
+        data = {};
+        data['q'] = q;
+        data['confidence'] = '5';
+        search(data);
     }
 
     $('#searchForm').submit(function(e){
@@ -187,7 +192,7 @@ $(document).ready(function() {
           }
         }
         console.log(data)
-        search(q, data);
+        search(data);
     });
 
 });
