@@ -141,7 +141,7 @@ CIF_CLIENT.test_settings=function(clickedbutton){
         $("#status").html(html).show().delay(delay).fadeOut('slow');
     }
 
-    cif_connector.ping({
+    CIFSDK.ping({
         remote: remote,
         token: token,
         success: success,

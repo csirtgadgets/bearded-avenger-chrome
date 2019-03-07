@@ -25,16 +25,16 @@ CIF_CLIENT.sendToServer=function(data){
        $("#results").html(html).show();
     }
 
-    if (!data['observable']) {
+    if (!data['indicator']) {
         fail({'status': 500});
     }
 
-    var obs = data['observable'];
+    var obs = data['indicator'];
 
-    cif_connector.submit({
+    CIFSDK.submit({
         remote: remote,
         token: token,
-        data: [data],
+        data: data,
         success: success,
         error: fail
     });
@@ -83,7 +83,7 @@ $(document).ready(function() {
 
     $("#myform").submit(function (event) {
         event.preventDefault();
-        var fields = $(":input").serializeArray();
+        var fields = $("#myform").serializeArray();
         var data = {};
         for (var i in fields) {
             console.log(fields[i].name);
@@ -92,6 +92,7 @@ $(document).ready(function() {
 
         data["provider"] = provider
 
+        console.log(JSON.stringify(data))
         CIF_CLIENT.sendToServer(data);
 
         // turn this into a checkbox?

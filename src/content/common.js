@@ -46,11 +46,15 @@ CIF_CLIENT.populateRestrictions=function(){
 }
 CIF_CLIENT.getServerLogSetting=function(server){
 	servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
-	return servers[server]['logQueries'];
+  if (servers) {
+	   return servers[server]['logQueries'];
+  }
 }
 CIF_CLIENT.getServerName=function(server){
-	servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
-	return servers[server]['name'];
+  servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
+  if (servers) {
+    return servers[server]['name'];
+  }
 }
 CIF_CLIENT.getDefaultServer=function(){
 	servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
@@ -62,21 +66,29 @@ CIF_CLIENT.getDefaultServer=function(){
 
 CIF_CLIENT.getServerGroups=function(server){
 	servers = JSON.parse(CIF_CLIENT.getItem('cifapiprofiles'));
-	return servers[server]['groups']
+  if (servers) {
+    return servers[server]['groups']
+  }
 }
 
 CIF_CLIENT.getServerProvider=function(server){
 	servers = JSON.parse(CIF_CLIENT.getItem('cifapiprofiles'));
-	return servers[server]['provider']
+  if (servers) {
+	   return servers[server]['provider']
+  }
 }
 
 CIF_CLIENT.getServerUrl=function(server){
 	servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
-	return servers[server]['url'];
+  if (servers) {
+	 return servers[server]['url'];
+  }
 }
 CIF_CLIENT.getServerKey=function(server){
 	servers = JSON.parse(CIF_CLIENT.getItem("cifapiprofiles"));
-	return servers[server]['key'];
+  if (servers) {
+    	return servers[server]['key'];
+  }
 }
 
 CIF_CLIENT.uri_escape=function( text, re ) {

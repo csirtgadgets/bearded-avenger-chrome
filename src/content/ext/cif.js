@@ -25,6 +25,7 @@ var CIFSDK = {
             url: args.remote,
             type: 'POST',
             dataType: 'json',
+            contentType: 'application/json',
             success: args.success,
             error: args.error,
             beforeSend: setHeaders,
@@ -43,21 +44,13 @@ var CIFSDK = {
     },
 
     search: function(args) {
-        args.remote = args.remote + '/indicators';
-        if (args.query) {
-            args.remote += '?q=' + args.query
+        console.log(args)
+        args.remote = args.remote + '/indicators?';
+        for (var i in args.data) {
+               args.remote += i + '=' + args.data[i] + '&';
         }
-        if (args.filters){
-            if(args.query){
-                args.remote += '&';
-            } else {
-                args.remote += '?';
-            }
-            for (var i in args.filters){
-                args.remote += i + '=' + args.filters[i] + '&';
-            }
-            args.remote = args.remote.substr(0, args.remote.length - 1);
-        }
+        args.remote = args.remote.substr(0, args.remote.length - 1);
+        console.log(args.remote)
         this.get(args);
     }
 };
